@@ -10,6 +10,7 @@ export const particleVertexShader = `
   
   varying vec3 vPosition;
   varying float vDistance;
+  varying float vPulse;
 
   void main() {
     vPosition = position;
@@ -22,6 +23,7 @@ export const particleVertexShader = `
     // Pointer repulsion & magnetic response
     float dist = distance(transformed, uPointer);
     vDistance = dist;
+    vPulse = uPulse;
     
     if (dist < 2.5) {
       vec3 dir = normalize(transformed - uPointer);
@@ -46,6 +48,7 @@ export const particleVertexShader = `
 export const particleFragmentShader = `
   varying vec3 vPosition;
   varying float vDistance;
+  varying float vPulse;
 
   void main() {
     // Render soft circular anti-aliased particles
@@ -53,14 +56,31 @@ export const particleFragmentShader = `
     if (distToCenter > 0.5) discard;
 
     // Soft core drop-off
-    float alpha = smoothstep(0.5, 0.0, distToCenter) * 0.75;
+    float alpha = smoothstep(0.5, 0.0, distToCenter) * 0.85;
     
-    // Monochromatic futuristic warm silver color palette
-    vec3 baseColor = vec3(0.88, 0.90, 0.92);
-    vec3 accentColor = vec3(0.95, 0.98, 1.0);
-    
-    vec3 finalColor = mix(accentColor, baseColor, clamp(vDistance * 0.2, 0.0, 1.0));
-    
+    // Vibrant Bioluminescent Palette
+    vec3 cyan     = vec3(0.0, 0.9, 1.0);   // Primary ambient neural nodes
+    vec3 magenta  = vec3(0.9, 0.1, 0.8);   // Spatial gradient blend
+    vec3 gold     = vec3(1.0, 0.65, 0.1);  // Pointer highlight glow
+    vec3 whiteCore = vec3(1.0, 0.98, 0.9); // Intense interaction core
+
+    // 1. Spatial base gradient (Cyan to Magenta based on particle X/Y position)
+    float spatialMix = clamp((vPosition.x + vPosition.y) * 0.2 + 0.5, 0.0, 1.0);
+    vec3 baseColor = mix(cyan, magenta, spatialMix);
+
+    // 2. Pointer proximity glow (shifts to warm Gold as pointer gets closer)
+    float proximity = clamp(1.0 - (vDistance / 2.5), 0.0, 1.0);
+    vec3 finalColor = mix(baseColor, gold, proximity * 0.85);
+
+    // 3. System pulse override (brightens to glowing hot white/yellow during pulse)
+    if (vPulse > 0.0) {
+      finalColor = mix(finalColor, whiteCore, sin(vPulse * 3.14159) * 0.6);
+    }
+
+    // Boost brightness at center of each particle for a subtle bloom effect
+    float coreGlow = smoothstep(0.3, 0.0, distToCenter);
+    finalColor += coreGlow * 0.25;
+
     gl_FragColor = vec4(finalColor, alpha);
   }
 `;

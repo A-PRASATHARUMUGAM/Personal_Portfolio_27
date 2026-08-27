@@ -76,12 +76,13 @@ export const FutureHero: React.FC = () => {
       </div>
 
       {/* Three.js Intelligence Field */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0  ">
         <IntelligenceField
           pointer={pointer}
           isPulsing={isPulsing}
           onPulseComplete={() => setIsPulsing(false)}
         />
+
       </div>
 
       {/* Top navigation */}
@@ -202,7 +203,7 @@ export const FutureHero: React.FC = () => {
         className="
           pointer-events-none
           absolute inset-0 z-10
-          flex items-center justify-center
+          flex items-center justify-center 
           px-5
         "
       >
@@ -241,19 +242,19 @@ export const FutureHero: React.FC = () => {
             />
 
             <h1
-              className="
-                relative
+        className="relative
                 text-[17vw]
-                font-extralight
-                leading-[0.78]
-                tracking-[-0.075em]
+                font-extralight 
+                leading-[0.99]
                 text-white
-                sm:text-[14vw]
-                md:text-[13vw]
-                lg:text-[11vw]
+                sm:text-[6vw]
+                md:text-[6vw]
+                lg:text-[5vw]
+                font-mono 
+
               "
             >
-              {/* PRASATH */}
+              PRASATH ARUMUGAM 
             </h1>
 
             <div
@@ -439,6 +440,7 @@ export const FutureHero: React.FC = () => {
           }
         }
       `}</style>
+
     </section>
   );
 };
