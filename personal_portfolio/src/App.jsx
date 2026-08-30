@@ -3,6 +3,9 @@ import React, { useState, useEffect } from 'react';
 import { FutureHero } from './components/hero/FutureHero';
 import { FutureNavigation } from './components/navigation/FutureNavigation';
 import { ArtifactGrid } from './components/projects/ArtifactGrid';
+import { CustomCursor } from './components/navigation/CustomCursor';
+import { ScrollProgress } from './components/navigation/ScrollProgress';
+import { CyberCursor } from './components/navigation/CyberCursor';
 
 export default function App() {
   const [loading, setLoading] = useState(true);
@@ -25,10 +28,13 @@ export default function App() {
   }
 
   return (
-    <main className="bg-[#08090a] min-h-screen text-slate-100 selection:bg-white selection:text-black">
+    <main className="bg-[#08090a] min-h-screen text-slate-100 selection:bg-emerald-400 selection:text-black cursor-none">
+      <CyberCursor />
+      <ScrollProgress />
+      <CustomCursor />
       <FutureNavigation />
       <FutureHero />
-      <ArtifactGrid />  
+      <ArtifactGrid />
     </main>
   );
 }

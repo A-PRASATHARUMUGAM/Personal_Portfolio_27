@@ -1,0 +1,37 @@
+/* ==========================================================================
+   FUTURISTIC TELEMETRY SCROLLBAR SYSTEM
+   ========================================================================== */
+
+/* Webkit Scrollbar Configuration (Chrome, Safari, Edge) */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #08090a;
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #34d399 0%, #38bdf8 100%);
+  box-shadow: 0 0 12px rgba(52, 211, 153, 0.6);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: #34d399;
+  box-shadow: 0 0 16px rgba(52, 211, 153, 0.9);
+}
+
+/* Firefox Support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.15) #08090a;
+}

@@ -12,6 +12,8 @@
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
     "@types/three": "^0.185.4",
+    "framer-motion": "^13.1.1",
+    "lucide-react": "^1.37.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "tailwindcss": "^4.3.3",
