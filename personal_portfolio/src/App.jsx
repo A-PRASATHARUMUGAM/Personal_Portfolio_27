@@ -28,7 +28,7 @@ export default function App() {
     <main className="bg-[#08090a] min-h-screen text-slate-100 selection:bg-white selection:text-black">
       <FutureNavigation />
       <FutureHero />
-      <ArtifactGrid />
+      <ArtifactGrid />  
     </main>
   );
 }
