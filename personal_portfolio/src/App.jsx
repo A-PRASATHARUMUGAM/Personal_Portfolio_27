@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
-import { FutureHero } from "./components/hero/FutureHero";
-import { NatureHero } from "./components/hero/NatureHero";
+import { FutureHero } from "./components/hero/Intelligence/FutureHero";
+import { NatureHero } from "./components/hero/NatureEnvironment/NatureHero";
 
 import { FutureNavigation } from "./components/navigation/FutureNavigation";
 import { CustomCursor } from "./components/navigation/CustomCursor";

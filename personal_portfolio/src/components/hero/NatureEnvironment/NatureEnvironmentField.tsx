@@ -6,7 +6,7 @@ import {
   realisticSkyFragmentShader,
   foliageVertexShader,
   foliageFragmentShader,
-} from "../../shaders/realisticEnvironmentShaders";
+} from "../../../shaders/NatuerEnvironmentSHAD/realisticEnvironmentShaders";
 
 interface NatureEnvironmentFieldProps {
   pointer: React.MutableRefObject<{ x: number; y: number }>;

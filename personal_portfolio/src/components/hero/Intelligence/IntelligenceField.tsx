@@ -4,7 +4,7 @@ import * as THREE from "three";
 import {
   particleVertexShader,
   particleFragmentShader,
-} from "../../shaders/neuralShaders";
+} from "../../../shaders/IntelligenceSHAD/neuralShaders";
 
 interface IntelligenceFieldProps {
   pointer: React.MutableRefObject<{ x: number; y: number }>;
