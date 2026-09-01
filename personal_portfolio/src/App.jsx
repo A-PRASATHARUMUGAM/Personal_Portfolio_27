@@ -12,7 +12,9 @@ import { ArtifactGrid } from "./components/projects/ArtifactGrid";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  const [activeDesign, setActiveDesign] = useState("nature");
+  
+  // Set default initial state to "neural"
+  const [activeDesign, setActiveDesign] = useState("neural");
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -22,7 +24,7 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Initial loading screen
+  // 1. Initial Loading Screen
   if (loading) {
     return (
       <div className="w-screen h-screen bg-[#08090a] flex flex-col items-center justify-center font-mono text-xs text-neutral-400 tracking-widest">
@@ -35,13 +37,13 @@ export default function App() {
     );
   }
 
+  // 2. Main Application View
   return (
     <main className="relative min-h-screen w-full overflow-x-hidden bg-[#08090a] text-slate-100 selection:bg-emerald-400 selection:text-black cursor-none">
 
       {/* =========================================================
           GLOBAL INTERACTION LAYER
       ========================================================= */}
-
       <CyberCursor />
       <CustomCursor />
       <ScrollProgress />
@@ -49,16 +51,14 @@ export default function App() {
       {/* =========================================================
           FUTURE NAVIGATION
       ========================================================= */}
-
       <FutureNavigation />
 
       {/* =========================================================
-          DESIGN SWITCHER
+          DESIGN SWITCHER CONTROLS
       ========================================================= */}
-
-      <div className="fixed bottom-6 right-6 z-[100] flex items-center gap-1 rounded-full border border-white/15 bg-black/60 p-1.5 shadow-2xl backdrop-blur-xl">
-
-        {/* Neural Design */}
+      <div className="fixed bottom-6 right-6 z-[100] flex items-center gap-1 rounded-full border border-white/15 bg-black/60 p-1.5 shadow-2xl backdrop-blur-xl select-none">
+        
+        {/* 01: NEURAL BUTTON */}
         <button
           type="button"
           onClick={() => setActiveDesign("neural")}
@@ -81,7 +81,7 @@ export default function App() {
           01: NEURAL
         </button>
 
-        {/* Nature Design */}
+        {/* 02: NATURE BUTTON */}
         <button
           type="button"
           onClick={() => setActiveDesign("nature")}
@@ -107,31 +107,23 @@ export default function App() {
       </div>
 
       {/* =========================================================
-          ACTIVE DESIGN
+          VIEW SWITCHER (NEURAL FIRST -> NATURE ON SWITCH)
       ========================================================= */}
+      <div key={activeDesign} className="w-full min-h-screen">
+        {activeDesign === "neural" && (
+          <section className="relative min-h-screen animate-in fade-in duration-700">
+            <FutureHero />
+            <ArtifactGrid />
+          </section>
+        )}
 
-      {activeDesign === "neural" ? (
-        <section
-          key="neural"
-          className="relative min-h-screen animate-in fade-in duration-700"
-        >
-          {/* Futuristic / Neural Hero */}
-          <FutureHero />
-
-          {/* Projects / Artifacts */}
-          <ArtifactGrid />
-        </section>
-      ) : (
-        <section
-          key="nature"
-          className="relative min-h-screen animate-in fade-in duration-700"
-        >
-          {/* Nature / Living Environment Hero */}
-          <NatureHero />
-        </section>
-      )}
+        {activeDesign === "nature" && (
+          <section className="relative min-h-screen animate-in fade-in duration-700">
+            <NatureHero />
+          </section>
+        )}
+      </div>
 
     </main>
   );
 }
-
