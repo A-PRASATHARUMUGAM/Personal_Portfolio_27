@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react';
-import { IntelligenceField } from './IntelligenceField';
+import React, { useRef, useState } from "react";
+import { IntelligenceField } from "./IntelligenceField";
 
 export const FutureHero: React.FC = () => {
   const [isPulsing, setIsPulsing] = useState(false);
@@ -82,7 +82,6 @@ export const FutureHero: React.FC = () => {
           isPulsing={isPulsing}
           onPulseComplete={() => setIsPulsing(false)}
         />
-
       </div>
 
       {/* Top navigation */}
@@ -103,7 +102,7 @@ export const FutureHero: React.FC = () => {
               className={`
                 h-1.5 w-1.5 rounded-full bg-white
                 transition-all duration-500
-                ${isHovered ? 'scale-[1.8]' : ''}
+                ${isHovered ? "scale-[1.8]" : ""}
               `}
             />
           </div>
@@ -161,7 +160,6 @@ export const FutureHero: React.FC = () => {
               shadow-[0_0_12px_rgba(52,211,153,.8)]
             "
           />
-
           SYSTEM ONLINE
         </button>
       </header>
@@ -178,17 +176,13 @@ export const FutureHero: React.FC = () => {
           lg:flex
         "
       >
-        <span className="text-white/60">
-          SYSTEM / 2030
-        </span>
+        <span className="text-white/60">SYSTEM / 2030</span>
 
         <div className="my-3 h-px w-20 bg-white/10" />
 
         <span>
           NEURAL FIELD:
-          <span className="ml-2 text-emerald-400">
-            ACTIVE
-          </span>
+          <span className="ml-2 text-emerald-400">ACTIVE</span>
         </span>
 
         <span>CORE ENGINE: ONLINE</span>
@@ -208,17 +202,16 @@ export const FutureHero: React.FC = () => {
         "
       >
         <div className="relative w-full max-w-6xl text-center">
-
           {/* Label */}
           <div className="mb-7 flex items-center justify-center gap-3">
             <span className="h-px w-8 bg-white/20" />
 
             <span
               className="
-                font-mono text-[9px]
+                font-mono text-[10px]
                 uppercase
                 tracking-[0.38em]
-                text-white/40
+                text-white
               "
             >
               Digital Intelligence / 001
@@ -242,7 +235,7 @@ export const FutureHero: React.FC = () => {
             />
 
             <h1
-        className="relative
+              className="relative
                 text-[17vw]
                 font-extralight 
                 leading-[0.99]
@@ -254,7 +247,7 @@ export const FutureHero: React.FC = () => {
 
               "
             >
-              PRASATH ARUMUGAM 
+              PRASATH ARUMUGAM
             </h1>
 
             <div
@@ -298,8 +291,8 @@ export const FutureHero: React.FC = () => {
               sm:text-sm
             "
           >
-            Building intelligent systems, scalable applications,
-            and meaningful digital experiences.
+            Building intelligent systems, scalable applications, and meaningful
+            digital experiences.
           </p>
 
           {/* Availability */}
@@ -440,7 +433,6 @@ export const FutureHero: React.FC = () => {
           }
         }
       `}</style>
-
     </section>
   );
 };

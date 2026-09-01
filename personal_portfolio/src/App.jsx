@@ -1,6 +1,6 @@
 // src/App.tsx
 import React, { useState, useEffect } from 'react';
-import { FutureHero } from './components/hero/FutureHero';
+import { FutureHero } from "./components/hero/FutureHero";
 import { FutureNavigation } from './components/navigation/FutureNavigation';
 import { ArtifactGrid } from './components/projects/ArtifactGrid';
 import { CustomCursor } from './components/navigation/CustomCursor';
