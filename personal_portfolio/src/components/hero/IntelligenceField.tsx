@@ -1,7 +1,10 @@
 // src/components/hero/IntelligenceField.tsx
-import React, { useEffect, useRef } from 'react';
-import * as THREE from 'three';
-import { particleVertexShader, particleFragmentShader } from '../../shaders/neuralShaders';
+import React, { useEffect, useRef } from "react";
+import * as THREE from "three";
+import {
+  particleVertexShader,
+  particleFragmentShader,
+} from "../../shaders/neuralShaders";
 
 interface IntelligenceFieldProps {
   pointer: React.MutableRefObject<{ x: number; y: number }>;
@@ -26,11 +29,15 @@ export const IntelligenceField: React.FC<IntelligenceFieldProps> = ({
       60,
       container.clientWidth / container.clientHeight,
       0.1,
-      100
+      100,
     );
     camera.position.z = 5.5;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+    const renderer = new THREE.WebGLRenderer({
+      antialias: true,
+      alpha: true,
+      powerPreference: "high-performance",
+    });
     renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
@@ -60,13 +67,19 @@ export const IntelligenceField: React.FC<IntelligenceFieldProps> = ({
     }
 
     const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('aScale', new THREE.BufferAttribute(scales, 1));
-    geometry.setAttribute('aRandomness', new THREE.BufferAttribute(randomness, 3));
+    geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+    geometry.setAttribute("aScale", new THREE.BufferAttribute(scales, 1));
+    geometry.setAttribute(
+      "aRandomness",
+      new THREE.BufferAttribute(randomness, 3),
+    );
 
     // 3. Line Connections Structure
     const lineGeometry = new THREE.BufferGeometry();
-    lineGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+    lineGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(positions, 3),
+    );
 
     const lineMaterial = new THREE.LineBasicMaterial({
       color: 0x4a5568,
@@ -144,10 +157,10 @@ export const IntelligenceField: React.FC<IntelligenceFieldProps> = ({
       renderer.setSize(container.clientWidth, container.clientHeight);
     };
 
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
       geometry.dispose();
       lineGeometry.dispose();
@@ -160,5 +173,10 @@ export const IntelligenceField: React.FC<IntelligenceFieldProps> = ({
     };
   }, []);
 
-  return <div ref={mountRef} className="absolute inset-0 w-full h-full cursor-pointer" />;
+  return (
+    <div
+      ref={mountRef}
+      className="absolute inset-0 h-full w-full cursor-pointer"
+    />
+  );
 };

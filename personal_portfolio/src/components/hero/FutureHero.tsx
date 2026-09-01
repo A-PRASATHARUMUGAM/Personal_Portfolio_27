@@ -1,3 +1,4 @@
+// src/components/hero/FutureHero.tsx
 import React, { useRef, useState } from "react";
 import { IntelligenceField } from "./IntelligenceField";
 
@@ -76,7 +77,7 @@ export const FutureHero: React.FC = () => {
       </div>
 
       {/* Three.js Intelligence Field */}
-      <div className="absolute inset-0  ">
+      <div className="absolute inset-0">
         <IntelligenceField
           pointer={pointer}
           isPulsing={isPulsing}
@@ -107,16 +108,16 @@ export const FutureHero: React.FC = () => {
             />
           </div>
 
-          <span className="font-mono text-[10px] tracking-[0.28em] text-white/60">
+          <span className="font-mono text-[10px] tracking-[0.25em] text-white/60">
             PRASATH / 01
           </span>
         </div>
 
-        <nav className="hidden items-center gap-8 font-mono text-[10px] tracking-[0.25em] text-white/35 sm:flex">
+        <nav className="hidden items-center gap-8 font-mono text-[12px] tracking-[0.25em] text-white sm:flex">
           <a
             href="#work"
             onClick={(e) => e.stopPropagation()}
-            className="transition-colors hover:text-white"
+            className="transition-colors hover:text-white/70"
           >
             WORK
           </a>
@@ -124,7 +125,7 @@ export const FutureHero: React.FC = () => {
           <a
             href="#about"
             onClick={(e) => e.stopPropagation()}
-            className="transition-colors hover:text-white"
+            className="transition-colors hover:text-white/70"
           >
             ABOUT
           </a>
@@ -132,7 +133,7 @@ export const FutureHero: React.FC = () => {
           <a
             href="#contact"
             onClick={(e) => e.stopPropagation()}
-            className="transition-colors hover:text-white"
+            className="transition-colors hover:text-white/70"
           >
             CONTACT
           </a>
@@ -171,7 +172,7 @@ export const FutureHero: React.FC = () => {
           hidden -translate-y-1/2
           flex-col gap-1.5
           font-mono text-[9px]
-          tracking-[0.18em]
+          tracking-[0.22em]
           text-white/30
           lg:flex
         "
@@ -180,9 +181,9 @@ export const FutureHero: React.FC = () => {
 
         <div className="my-3 h-px w-20 bg-white/10" />
 
-        <span>
+        <span className="flex items-center gap-2">
           NEURAL FIELD:
-          <span className="ml-2 text-emerald-400">ACTIVE</span>
+          <span className="text-emerald-400">ACTIVE</span>
         </span>
 
         <span>CORE ENGINE: ONLINE</span>
@@ -197,11 +198,17 @@ export const FutureHero: React.FC = () => {
         className="
           pointer-events-none
           absolute inset-0 z-10
-          flex items-center justify-center 
+          flex items-center justify-center
           px-5
         "
       >
         <div className="relative w-full max-w-6xl text-center">
+          {/* Corner brackets — subtle HUD framing accent */}
+          <span className="pointer-events-none absolute -left-4 -top-8 h-4 w-4 border-l border-t border-white/15 sm:-left-8 sm:-top-10 sm:h-6 sm:w-6" />
+          <span className="pointer-events-none absolute -right-4 -top-8 h-4 w-4 border-r border-t border-white/15 sm:-right-8 sm:-top-10 sm:h-6 sm:w-6" />
+          <span className="pointer-events-none absolute -bottom-8 -left-4 h-4 w-4 border-b border-l border-white/15 sm:-bottom-10 sm:-left-8 sm:h-6 sm:w-6" />
+          <span className="pointer-events-none absolute -bottom-8 -right-4 h-4 w-4 border-b border-r border-white/15 sm:-bottom-10 sm:-right-8 sm:h-6 sm:w-6" />
+
           {/* Label */}
           <div className="mb-7 flex items-center justify-center gap-3">
             <span className="h-px w-8 bg-white/20" />
@@ -210,7 +217,7 @@ export const FutureHero: React.FC = () => {
               className="
                 font-mono text-[10px]
                 uppercase
-                tracking-[0.38em]
+                tracking-[0.35em]
                 text-white
               "
             >
@@ -235,16 +242,12 @@ export const FutureHero: React.FC = () => {
             />
 
             <h1
-              className="relative
-                text-[17vw]
-                font-extralight 
+              className="
+                relative
+                font-mono font-extralight
                 leading-[0.99]
                 text-white
-                sm:text-[6vw]
-                md:text-[6vw]
-                lg:text-[5vw]
-                font-mono 
-
+                text-[clamp(2.75rem,13vw,6.5rem)]
               "
             >
               PRASATH ARUMUGAM
@@ -269,7 +272,7 @@ export const FutureHero: React.FC = () => {
               className="
                 font-mono text-xs
                 uppercase
-                tracking-[0.48em]
+                tracking-[0.45em]
                 text-white/55
                 sm:text-sm
               "
@@ -340,7 +343,7 @@ export const FutureHero: React.FC = () => {
           <span
             className="
               font-mono text-[9px]
-              tracking-[0.18em]
+              tracking-[0.22em]
               text-white/50
             "
           >
@@ -363,7 +366,7 @@ export const FutureHero: React.FC = () => {
           className="
             font-mono text-[8px]
             tracking-[0.35em]
-            text-white/25
+            text-white
           "
         >
           SCROLL TO EXPLORE
@@ -374,7 +377,7 @@ export const FutureHero: React.FC = () => {
             className="
               absolute left-0 top-0
               h-3 w-px
-              bg-white/60
+              bg-white/100
               animate-[scrollLine_1.8s_ease-in-out_infinite]
             "
           />
@@ -389,25 +392,37 @@ export const FutureHero: React.FC = () => {
           lg:right-14
         "
       >
-        <div className="flex items-center gap-2 font-mono text-[9px]">
-          <span className="text-white/20">2026</span>
-
-          <span className="h-px w-8 bg-white/10" />
-
-          <span className="text-white/20">2028</span>
-
-          <span className="h-px w-8 bg-white/10" />
-
+        <div className="flex flex-col gap-2">
           <span
             className="
-              border border-white/15
-              bg-white/[0.04]
-              px-2 py-1
-              text-white/70
+              font-mono text-[9px]
+              tracking-[0.22em]
+              text-white/25
             "
           >
-            2030
+            TIMELINE
           </span>
+
+          <div className="flex items-center gap-2 font-mono text-[9px]">
+            <span className="text-white/20">2026</span>
+
+            <span className="h-px w-8 bg-white/10" />
+
+            <span className="text-white/20">2028</span>
+
+            <span className="h-px w-8 bg-white/10" />
+
+            <span
+              className="
+                border border-white/15
+                bg-white/[0.04]
+                px-2 py-1
+                text-white/70
+              "
+            >
+              2030
+            </span>
+          </div>
         </div>
       </div>
 
