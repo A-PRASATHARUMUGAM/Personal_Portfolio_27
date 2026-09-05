@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import { FutureHero } from "./components/hero/Intelligence/FutureHero";
-// import { NatureHero } from "./components/hero/NatureEnvironment/NatureHero";
+import { NatureHero } from "./components/hero/NatureEnvironment/NatureHero";
 
 import { FutureNavigation } from "./components/navigation/FutureNavigation";
 import { CustomCursor } from "./components/navigation/CustomCursor";
@@ -56,10 +56,10 @@ export default function App() {
       {/* =========================================================
           DESIGN SWITCHER CONTROLS
       ========================================================= */}
-      
+      <div className="fixed bottom-6 right-6 z-[100] flex items-center gap-1 rounded-full border border-white/15 bg-black/60 p-1.5 shadow-2xl backdrop-blur-xl select-none">
         
         {/* 01: NEURAL BUTTON */}
-        {/* <button
+        <button
           type="button"
           onClick={() => setActiveDesign("neural")}
           className={`
@@ -79,31 +79,32 @@ export default function App() {
           `}
         >
           01: NEURAL
-        </button> */}
+        </button>
 
         {/* 02: NATURE BUTTON */}
-          {/* <button
-            type="button"
-            onClick={() => setActiveDesign("nature")}
-            className={`
-              rounded-full
-              px-3
-              py-1.5
-              font-mono
-              text-[9px]
-              tracking-widest
-              transition-all
-              duration-300
-              ${
-                activeDesign === "nature"
-                  ? "bg-white text-black font-semibold shadow-lg"
-                  : "text-white/50 hover:bg-white/10 hover:text-white"
-              }
-            `}
-          >
-            02: NATURE
-          </button> */}
+        <button
+          type="button"
+          onClick={() => setActiveDesign("nature")}
+          className={`
+            rounded-full
+            px-3
+            py-1.5
+            font-mono
+            text-[9px]
+            tracking-widest
+            transition-all
+            duration-300
+            ${
+              activeDesign === "nature"
+                ? "bg-white text-black font-semibold shadow-lg"
+                : "text-white/50 hover:bg-white/10 hover:text-white"
+            }
+          `}
+        >
+          02: NATURE
+        </button>
 
+      </div>
 
       {/* =========================================================
           VIEW SWITCHER (NEURAL FIRST -> NATURE ON SWITCH)
