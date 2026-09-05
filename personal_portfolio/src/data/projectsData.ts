@@ -6,6 +6,7 @@ export interface Project {
   status: 'Completed' | 'Live Project' | 'Currently Working';
   platform?: string;
   description: string;
+  imageUrl?: string;
   technology: string[];
   githubUrl?: string;
   liveUrl?: string;
@@ -25,6 +26,7 @@ export const PROJECTS_DATA: Project[] = [
     status: 'Completed',
     platform: 'Web',
     description: 'A responsive marketing campaign landing page focused on visual presentation, user engagement, responsive design, and conversion-oriented content.',
+    imageUrl: "/projects/LandingPage/L2.png",
     technology: ['HTML5', 'CSS3', 'JavaScript', 'React', 'Tailwind CSS'],
     githubUrl: 'https://github.com/A-PRASATHARUMUGAM',
     problemStatement: 'Marketing campaigns frequently struggle with high drop-off rates due to non-responsive layouts, poor loading speeds, and unoptimized visual hierarchies.',

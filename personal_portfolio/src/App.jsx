@@ -12,10 +12,6 @@ import { ArtifactGrid } from "./components/projects/ArtifactGrid";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
-  
-  // Set default initial state to "neural"
-  const [activeDesign, setActiveDesign] = useState("neural");
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
@@ -41,89 +37,12 @@ export default function App() {
   return (
     <main className="relative min-h-screen w-full overflow-x-hidden bg-[#08090a] text-slate-100 selection:bg-emerald-400 selection:text-black cursor-none">
 
-      {/* =========================================================
-          GLOBAL INTERACTION LAYER
-      ========================================================= */}
       <CyberCursor />
       <CustomCursor />
       <ScrollProgress />
-
-      {/* =========================================================
-          FUTURE NAVIGATION
-      ========================================================= */}
       <FutureNavigation />
-
-      {/* =========================================================
-          DESIGN SWITCHER CONTROLS
-      ========================================================= */}
-      <div className="fixed bottom-6 right-6 z-[100] flex items-center gap-1 rounded-full border border-white/15 bg-black/60 p-1.5 shadow-2xl backdrop-blur-xl select-none">
-        
-        {/* 01: NEURAL BUTTON */}
-        <button
-          type="button"
-          onClick={() => setActiveDesign("neural")}
-          className={`
-            rounded-full
-            px-3
-            py-1.5
-            font-mono
-            text-[9px]
-            tracking-widest
-            transition-all
-            duration-300
-            ${
-              activeDesign === "neural"
-                ? "bg-white text-black font-semibold shadow-lg"
-                : "text-white/50 hover:bg-white/10 hover:text-white"
-            }
-          `}
-        >
-          01: NEURAL
-        </button>
-
-        {/* 02: NATURE BUTTON */}
-        <button
-          type="button"
-          onClick={() => setActiveDesign("nature")}
-          className={`
-            rounded-full
-            px-3
-            py-1.5
-            font-mono
-            text-[9px]
-            tracking-widest
-            transition-all
-            duration-300
-            ${
-              activeDesign === "nature"
-                ? "bg-white text-black font-semibold shadow-lg"
-                : "text-white/50 hover:bg-white/10 hover:text-white"
-            }
-          `}
-        >
-          02: NATURE
-        </button>
-
-      </div>
-
-      {/* =========================================================
-          VIEW SWITCHER (NEURAL FIRST -> NATURE ON SWITCH)
-      ========================================================= */}
-      <div key={activeDesign} className="w-full min-h-screen">
-        {activeDesign === "neural" && (
-          <section className="relative min-h-screen animate-in fade-in duration-700">
-            <FutureHero />
-            <ArtifactGrid />
-          </section>
-        )}
-
-        {activeDesign === "nature" && (
-          <section className="relative min-h-screen animate-in fade-in duration-700">
-            <NatureHero />
-          </section>
-        )}
-      </div>
-
+      <FutureHero />
+      <ArtifactGrid />
     </main>
   );
 }
