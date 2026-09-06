@@ -1,17 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import { FutureHero } from "./components/hero/Intelligence/FutureHero";
-// import { FutureNavigation } from "./components/navigation/FutureNavigation";
 import { CyberCursor } from "./components/navigation/CyberCursor";
 import { ScrollProgress } from "./components/navigation/ScrollProgress";
+import TopNavigation from "./components/navigation/TopNavigation";
+import MobileNavigation from "./components/navigation/MobileNavigation";
+import SectionNavigation from "./components/navigation/SectionNavigation";
+import BackToTop from "./components/navigation/BackToTop";
 
-// Replace ArtifactGrid with DigitalArtifacts
 import DigitalArtifacts from "./components/projects/DigitalArtifacts";
-
 import AboutSection from "./components/about/AboutSection";
+
+import { useActiveSection } from "./hooks/useActiveSection";
 
 export default function App() {
   const [loading, setLoading] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { activeSection, scrollToSection } = useActiveSection();
 
   useEffect(() => {
     const prefersReducedMotion = window.matchMedia(
@@ -24,6 +29,14 @@ export default function App() {
     );
 
     return () => clearTimeout(timer);
+  }, []);
+
+  const handleMobileToggle = useCallback(() => {
+    setMobileMenuOpen((prev) => !prev);
+  }, []);
+
+  const handleMobileClose = useCallback(() => {
+    setMobileMenuOpen(false);
   }, []);
 
   if (loading) {
@@ -42,9 +55,27 @@ export default function App() {
     <main className="relative min-h-screen w-full overflow-x-hidden bg-[#08090a] text-slate-100 selection:bg-emerald-400 selection:text-black">
       <CyberCursor />
       <ScrollProgress />
-      {/* <FutureNavigation /> */}
+
+      {/* Global Navigation System */}
+      <TopNavigation
+        activeSection={activeSection}
+        onNavigate={scrollToSection}
+      />
+      <MobileNavigation
+        activeSection={activeSection}
+        isOpen={mobileMenuOpen}
+        onToggle={handleMobileToggle}
+        onClose={handleMobileClose}
+        onNavigate={scrollToSection}
+      />
+      <SectionNavigation
+        activeSection={activeSection}
+        onNavigate={scrollToSection}
+      />
+      <BackToTop />
+
+      {/* Page Sections */}
       <FutureHero />
-      {/* Redesigned 4-chapter project section */}
       <DigitalArtifacts />
       <AboutSection />
     </main>

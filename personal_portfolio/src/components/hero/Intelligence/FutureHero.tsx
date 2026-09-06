@@ -1,18 +1,7 @@
 // src/components/hero/Intelligence/FutureHero.tsx
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState, useCallback } from "react";
 import { IntelligenceField } from "./IntelligenceField";
-
-function usePrefersReducedMotion() {
-  const [reduced, setReduced] = useState(false);
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setReduced(mediaQuery.matches);
-    const listener = (e: MediaQueryListEvent) => setReduced(e.matches);
-    mediaQuery.addEventListener("change", listener);
-    return () => mediaQuery.removeEventListener("change", listener);
-  }, []);
-  return reduced;
-}
+import { usePrefersReducedMotion } from "../../../hooks/usePrefersReducedMotion";
 
 /**
  * A small status dot reused everywhere the page reports a live signal
@@ -71,23 +60,24 @@ export const FutureHero: React.FC = () => {
     }, 1200);
   };
 
-  // Smooth scroll handler for anchor links
-  const handleNavClick = (
-    e: React.MouseEvent<HTMLAnchorElement>,
-    targetId: string,
-  ) => {
-    e.preventDefault();
-    e.stopPropagation();
+  // Smooth scroll handler for CTA links
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, targetId: string) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-    const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
-    }
-  };
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+      }
+    },
+    [reducedMotion],
+  );
 
   return (
     <section
-      className="relative min-h-screen w-full overflow-hidden bg-[#070809] text-white select-none"
+      id="home"
+      className="relative min-h-screen w-full overflow-hidden bg-[#070809] text-white select-none scroll-mt-[72px]"
       onMouseMove={handleMouseMove}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -117,66 +107,6 @@ export const FutureHero: React.FC = () => {
           onPulseComplete={() => setIsPulsing(false)}
         />
       </div>
-
-      {/* Header Navigation - High z-index & explicit pointer events */}
-      <header className="absolute left-0 right-0 top-0 z-50 flex items-center justify-between gap-3 px-4 py-5 sm:px-10 sm:py-8 lg:px-14">
-        <div className="flex items-center gap-3">
-          <div className="relative flex h-7 w-7 flex-shrink-0 items-center justify-center">
-            <div className="absolute inset-0 rounded-full border border-white/25" />
-            {!reducedMotion && (
-              <span className="absolute h-1.5 w-1.5 animate-ping rounded-full bg-white/50" />
-            )}
-            <div
-              className={`relative h-1.5 w-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,.7)] transition-transform duration-500 ${
-                isHovered ? "scale-[1.8]" : ""
-              }`}
-            />
-          </div>
-
-          <span className="font-mono text-[10px] tracking-[0.2em] text-white/80">
-            PRASATH / 01
-          </span>
-        </div>
-
-        {/* Interactive Navigation Bar */}
-        <nav className="pointer-events-auto flex items-center gap-4 font-mono text-[11px] tracking-[0.2em] text-white sm:gap-8 sm:text-[12px] sm:tracking-[0.25em]">
-          <a
-            href="#a1-dev"
-            onClick={(e) => handleNavClick(e, "a1-dev")}
-            className="cursor-pointer transition-colors hover:text-cyan-400"
-          >
-            WORK
-          </a>
-
-          <a
-            href="#a2-qa"
-            onClick={(e) => handleNavClick(e, "a2-qa")}
-            className="cursor-pointer transition-colors hover:text-cyan-400"
-          >
-            ABOUT
-          </a>
-
-          <a
-            href="#a4-marketing"
-            onClick={(e) => handleNavClick(e, "a4-marketing")}
-            className="cursor-pointer transition-colors hover:text-cyan-400"
-          >
-            SERVICES
-          </a>
-        </nav>
-
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation();
-            handlePulse();
-          }}
-          className="pointer-events-auto group hidden items-center gap-2 font-mono text-[10px] tracking-[0.2em] text-white/70 transition-colors hover:text-white sm:flex"
-        >
-          <StatusDot reduced={reducedMotion} />
-          SYSTEM ONLINE
-        </button>
-      </header>
 
       {/* Left telemetry display */}
       <div className="pointer-events-none absolute left-6 top-1/2 z-20 hidden -translate-y-1/2 flex-col gap-1.5 font-mono text-[10px] tracking-[0.18em] text-white/55 lg:flex">
@@ -228,7 +158,53 @@ export const FutureHero: React.FC = () => {
             digital experiences.
           </p>
 
-          <div className="mt-9 flex items-center justify-center">
+          {/* Hero CTAs */}
+          <div className="pointer-events-auto mt-9 flex flex-wrap items-center justify-center gap-4">
+            <a
+              href="#projects"
+              onClick={(e) => handleNavClick(e, "projects")}
+              className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-cyan-500 to-emerald-500 px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.2em] text-black shadow-lg transition-all duration-300 hover:shadow-[0_0_25px_rgba(34,211,238,0.4)] active:scale-95"
+            >
+              <svg
+                className="h-3.5 w-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16m-7 6h7"
+                />
+              </svg>
+              View Projects
+            </a>
+            <a
+              href="#contact"
+              onClick={(e) => handleNavClick(e, "contact")}
+              className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/[0.04] px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.2em] text-white backdrop-blur-md transition-all duration-300 hover:border-white/40 hover:bg-white/10 active:scale-95"
+            >
+              <svg
+                className="h-3.5 w-3.5"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                />
+              </svg>
+              Contact Me
+            </a>
+          </div>
+
+          <div className="mt-7 flex items-center justify-center">
             <div className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-black/60 px-4 py-1.5 shadow-lg backdrop-blur-md transition-all hover:border-white/40 hover:bg-black/80">
               <StatusDot reduced={reducedMotion} />
               <span

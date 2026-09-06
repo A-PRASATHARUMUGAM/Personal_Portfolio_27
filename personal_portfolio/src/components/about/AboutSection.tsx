@@ -42,11 +42,11 @@ const Github = ({ className = "h-5 w-5" }: { className?: string }) => (
   </svg>
 );
 
-const NAV_SECTIONS = [
+const ABOUT_NAV_SECTIONS = [
   { id: "about-me", title: "About", icon: User },
-  { id: "about-skills", title: "Skills", icon: Layers },
-  { id: "about-education", title: "Education", icon: GradIcon },
-  { id: "about-contact", title: "Contact", icon: MailIcon },
+  { id: "skills", title: "Skills", icon: Layers },
+  { id: "education", title: "Education", icon: GradIcon },
+  { id: "contact", title: "Contact", icon: MailIcon },
 ];
 
 const SKILL_TABS = [
@@ -205,7 +205,7 @@ export default function AboutSection() {
       },
       { threshold: 0.3 },
     );
-    NAV_SECTIONS.forEach((sec) => {
+    ABOUT_NAV_SECTIONS.forEach((sec) => {
       const el = document.getElementById(sec.id);
       if (el) observer.observe(el);
     });
@@ -224,7 +224,10 @@ export default function AboutSection() {
     MARKETING_GROUPS.reduce((sum, g) => sum + g.items.length, 0);
 
   return (
-    <section className="relative bg-[#08090a] text-slate-100 min-h-screen py-20 px-4 sm:px-8 lg:px-16 overflow-hidden selection:bg-cyan-500 selection:text-black">
+    <section
+      id="about"
+      className="relative bg-[#08090a] text-slate-100 min-h-screen py-20 px-4 sm:px-8 lg:px-16 overflow-hidden selection:bg-cyan-500 selection:text-black scroll-mt-[72px]"
+    >
       <Suspense fallback={<div className="absolute inset-0 bg-[#08090a]" />}>
         <AboutBackground />
       </Suspense>
@@ -232,7 +235,7 @@ export default function AboutSection() {
       {/* Sticky sub-nav — same pill-nav pattern as DigitalArtifacts */}
       <header className="sticky top-6 z-40 flex justify-center mb-16">
         <nav className="flex items-center gap-1 sm:gap-2 p-1.5 sm:p-2 rounded-full bg-slate-900/80 backdrop-blur-md border border-white/10 shadow-2xl">
-          {NAV_SECTIONS.map((tab) => {
+          {ABOUT_NAV_SECTIONS.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeNav === tab.id;
             return (
@@ -280,12 +283,12 @@ export default function AboutSection() {
               className="lg:col-span-2 rounded-2xl bg-slate-900/40 border border-white/10 backdrop-blur-md p-6 sm:p-8"
             >
               <p className="text-sm sm:text-base font-light leading-relaxed text-neutral-300">
-                I'm a Full Stack Developer with hands-on experience across
+                I'm a AI Software Engineer with hands-on experience across
                 modern web development, AI-assisted tooling, creative design,
                 video and content creation, and digital marketing. I like
-                building things end-to-end — from a database schema to the pixel
-                that ships in production — and pairing that engineering
-                discipline with a creative eye for visual and content work.
+                building things end-to-end from a database schema to the pixel
+                that ships in production and pairing that engineering discipline
+                with a creative eye for visual and content work.
               </p>
               <div className="mt-6 flex flex-wrap gap-2">
                 {ROLE_TAGS.map((tag) => (
@@ -343,7 +346,7 @@ export default function AboutSection() {
         </section>
 
         {/* SKILLS */}
-        <section id="about-skills" className="scroll-mt-28 space-y-8">
+        <section id="skills" className="scroll-mt-28 space-y-8">
           <SubHeader
             eyebrow="EXPERTISE"
             title="Core Skills & Expertise"
@@ -411,7 +414,7 @@ export default function AboutSection() {
         </section>
 
         {/* EDUCATION */}
-        <section id="about-education" className="scroll-mt-28 space-y-8">
+        <section id="education" className="scroll-mt-28 space-y-8">
           <SubHeader
             eyebrow="BACKGROUND"
             title="Education"
@@ -454,7 +457,7 @@ export default function AboutSection() {
         </section>
 
         {/* CONTACT */}
-        <section id="about-contact" className="scroll-mt-28 space-y-8">
+        <section id="contact" className="scroll-mt-28 space-y-8">
           <SubHeader
             eyebrow="GET IN TOUCH"
             title="Contact"

@@ -1,6 +1,7 @@
 // DigitalArtifacts.tsx
 import React, { useState, useEffect, useRef, Suspense, lazy } from "react";
-import { motion, useScroll, useSpring } from "framer-motion";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
+import { motion } from "framer-motion";
 import {
   Code,
   ShieldCheck,
@@ -148,17 +149,7 @@ const MARKETING_CARDS = [
   },
 ];
 
-function usePrefersReducedMotion() {
-  const [prefersReduced, setPrefersReduced] = useState(false);
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    setPrefersReduced(mediaQuery.matches);
-    const listener = (e: MediaQueryListEvent) => setPrefersReduced(e.matches);
-    mediaQuery.addEventListener("change", listener);
-    return () => mediaQuery.removeEventListener("change", listener);
-  }, []);
-  return prefersReduced;
-}
+// usePrefersReducedMotion imported from shared hook above
 
 export default function DigitalArtifacts() {
   const [activeTab, setActiveTab] = useState("a1-dev");
@@ -168,13 +159,6 @@ export default function DigitalArtifacts() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
-
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end end"],
-  });
-
-  const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
 
   // IntersectionObserver to auto-update active navigation tab on scroll
   useEffect(() => {
@@ -208,8 +192,9 @@ export default function DigitalArtifacts() {
 
   return (
     <section
+      id="projects"
       ref={containerRef}
-      className="relative bg-[#08090a] text-slate-100 min-h-screen py-20 px-4 sm:px-8 lg:px-16 overflow-hidden selection:bg-cyan-500 selection:text-black"
+      className="relative bg-[#08090a] text-slate-100 min-h-screen py-20 px-4 sm:px-8 lg:px-16 overflow-hidden selection:bg-cyan-500 selection:text-black scroll-mt-[72px]"
     >
       <Suspense fallback={<div className="absolute inset-0 bg-[#08090a]" />}>
         <ArtifactsBackground />
@@ -250,32 +235,6 @@ export default function DigitalArtifacts() {
           })}
         </nav>
       </header>
-
-      {/* Scroll-Progress Indicator */}
-      <aside className="fixed right-6 top-1/2 -translate-y-1/2 z-30 hidden lg:flex flex-col items-center gap-6 pointer-events-none">
-        <div className="relative w-0.5 h-48 bg-white/10 rounded-full overflow-hidden">
-          <motion.div
-            className="absolute top-0 w-full bg-gradient-to-b from-cyan-400 to-emerald-400 origin-top"
-            style={{
-              scaleY: prefersReducedMotion ? 1 : scaleY,
-              height: "100%",
-            }}
-          />
-        </div>
-        <div className="flex flex-col gap-3">
-          {SECTIONS.map((sec) => (
-            <button
-              key={sec.id}
-              onClick={() => scrollToSection(sec.id)}
-              className={`w-2.5 h-2.5 rounded-full border pointer-events-auto transition-all duration-300 ${
-                activeTab === sec.id
-                  ? "bg-cyan-400 border-cyan-300 shadow-[0_0_10px_#22d3ee] scale-125"
-                  : "bg-transparent border-white/20 hover:border-white/50"
-              }`}
-            />
-          ))}
-        </div>
-      </aside>
 
       <div className="max-w-7xl mx-auto space-y-32 relative z-10">
         {/* CHAPTER 01 */}

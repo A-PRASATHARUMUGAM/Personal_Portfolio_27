@@ -4,6 +4,11 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Offset sections so the fixed header doesn't cover them on anchor-scroll */
+section[id] {
+  scroll-margin-top: 72px;
+}
+
 body {
   margin: 0;
   padding: 0;
