@@ -210,28 +210,33 @@ export const FutureHero: React.FC = () => {
 
           <div className="relative">
             <div className="pointer-events-none absolute left-1/2 top-1/2 h-32 w-[70%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/[0.05] blur-[70px]" />
-            <h1 className="relative font-mono font-extralight leading-[0.99] text-white text-[clamp(2.75rem,13vw,6.5rem)] drop-shadow-[0_0_30px_rgba(255,255,255,0.15)]">
+
+            <h1 className="relative font-mono font-black leading-[0.99] text-white text-[clamp(2.75rem,13vw,6.5rem)] drop-shadow-[0_0_30px_rgba(255,255,255,0.15)] ">
               PRASATH ARUMUGAM
             </h1>
+
             <div className="pointer-events-none absolute left-0 right-0 top-1/2 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
           </div>
 
           <div className="mt-8">
-            <span className="font-mono text-xs uppercase tracking-[0.4em] text-white/85 sm:text-sm">
-              Full Stack Developer
+            <span className="inline-block rounded-full border border-white/20 bg-white/10 px-5 py-2 font-mono text-xs uppercase tracking-[0.4em] text-white shadow-lg backdrop-blur-md backdrop-saturate-150 transition-all hover:border-white/40 hover:bg-white/20 sm:text-sm bg-gradient-to-r from-cyan-600 to-blue-400 font-black">
+              AI Software Developer
             </span>
           </div>
-
-          <p className="mx-auto mt-7 max-w-[460px] text-xs font-light leading-6 tracking-wide text-slate-300 sm:text-sm">
+          <p className="mx-auto mt-7 max-w-[460px] text-xs font-light leading-6 tracking-wide text-slate-300 sm:text-sm ">
             Building intelligent systems, scalable applications, and meaningful
             digital experiences.
           </p>
 
-          <div className="mt-9 flex items-center justify-center gap-2.5">
-            <StatusDot reduced={reducedMotion} />
-            <span className="font-mono text-[10px] tracking-[0.28em] text-white/75">
-              AVAILABLE FOR OPPORTUNITIES
-            </span>
+          <div className="mt-9 flex items-center justify-center">
+            <div className="inline-flex items-center justify-center gap-2 rounded-full border border-white/20 bg-black/60 px-4 py-1.5 shadow-lg backdrop-blur-md transition-all hover:border-white/40 hover:bg-black/80">
+              <StatusDot reduced={reducedMotion} />
+              <span
+                className={`font-mono text-[8px] uppercase tracking-[0.25em] text-white sm:text-[10px] ${reducedMotion ? "" : "animate-pulse"}`}
+              >
+                AVAILABLE FOR OPPORTUNITIES
+              </span>
+            </div>
           </div>
         </div>
       </div>

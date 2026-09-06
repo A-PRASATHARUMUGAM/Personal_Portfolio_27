@@ -8,6 +8,8 @@ import { ScrollProgress } from "./components/navigation/ScrollProgress";
 // Replace ArtifactGrid with DigitalArtifacts
 import DigitalArtifacts from "./components/projects/DigitalArtifacts";
 
+import AboutSection from "./components/about/AboutSection";
+
 export default function App() {
   const [loading, setLoading] = useState(true);
 
@@ -44,6 +46,7 @@ export default function App() {
       <FutureHero />
       {/* Redesigned 4-chapter project section */}
       <DigitalArtifacts />
+      <AboutSection />
     </main>
   );
 }
