@@ -1,4 +1,4 @@
-// src/components/hero/IntelligenceField.tsx
+// src/components/hero/Intelligence/IntelligenceField.tsx
 import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import {
@@ -22,6 +22,10 @@ export const IntelligenceField: React.FC<IntelligenceFieldProps> = ({
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
 
     // 1. Scene, Camera, Renderer Setup
     const scene = new THREE.Scene();
@@ -147,7 +151,12 @@ export const IntelligenceField: React.FC<IntelligenceFieldProps> = ({
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    animate();
+    if (prefersReducedMotion) {
+      // One still frame: the field is visible, nothing drifts or spins.
+      renderer.render(scene, camera);
+    } else {
+      animate();
+    }
 
     // 6. Handle Resize
     const handleResize = () => {
@@ -155,6 +164,7 @@ export const IntelligenceField: React.FC<IntelligenceFieldProps> = ({
       camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
       renderer.setSize(container.clientWidth, container.clientHeight);
+      if (prefersReducedMotion) renderer.render(scene, camera);
     };
 
     window.addEventListener("resize", handleResize);

@@ -4,12 +4,29 @@ import * as THREE from "three";
 import { PROJECTS_DATA, Project } from "../../data/projectsData";
 import { ProjectDetailModal } from "./ProjectDetailModal";
 import { SpatialCard3D } from "./SpatialCard3D";
+import { useOnScreen } from "../../hooks/useOnScreen";
+import { usePrefersReducedMotion } from "../../hooks/usePrefersReducedMotion";
 
 type FilterType = "ALL" | "PERSONAL" | "OFFICE" | "CURRENT";
 
-// Particle Background Canvas covering the entire ArtifactGrid
-const GridParticleCanvas: React.FC = () => {
+const FILTERS: { id: FilterType; label: string }[] = [
+  { id: "ALL", label: "All" },
+  { id: "PERSONAL", label: "Personal" },
+  { id: "OFFICE", label: "Office" },
+  { id: "CURRENT", label: "In progress" },
+];
+
+/**
+ * Ambient constellation backdrop for the project section: floating nodes
+ * with faint connecting lines when they drift close together. Pauses
+ * itself when the section is off-screen and renders a single static
+ * frame (no animation loop at all) when the user prefers reduced motion.
+ */
+const GridParticleCanvas: React.FC<{ isOnScreen: boolean }> = ({
+  isOnScreen,
+}) => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
     const container = mountRef.current;
@@ -29,11 +46,19 @@ const GridParticleCanvas: React.FC = () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     container.appendChild(renderer.domElement);
 
-    // Floating Geometry Particle Nodes scaled for full screen container
-    const particleCount = 250;
+    const isMobile = window.innerWidth < 768;
+    const particleCount = isMobile ? 90 : 180;
     const positions = new Float32Array(particleCount * 3);
-    for (let i = 0; i < particleCount * 3; i++) {
-      positions[i] = (Math.random() - 0.5) * 6;
+    const velocities = new Float32Array(particleCount * 3);
+
+    for (let i = 0; i < particleCount; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 6;
+      positions[i * 3 + 1] = (Math.random() - 0.5) * 6;
+      positions[i * 3 + 2] = (Math.random() - 0.5) * 6;
+
+      velocities[i * 3] = (Math.random() - 0.5) * 0.0025;
+      velocities[i * 3 + 1] = (Math.random() - 0.5) * 0.0025;
+      velocities[i * 3 + 2] = (Math.random() - 0.5) * 0.0025;
     }
 
     const geometry = new THREE.BufferGeometry();
@@ -43,23 +68,101 @@ const GridParticleCanvas: React.FC = () => {
       size: 0.03,
       color: new THREE.Color(0x38bdf8),
       transparent: true,
-      opacity: 0.35,
+      opacity: 0.4,
       blending: THREE.AdditiveBlending,
     });
 
     const particles = new THREE.Points(geometry, material);
     scene.add(particles);
 
+    // Connecting lines, rebuilt each frame from current proximity.
+    const maxLineSegments = particleCount * 4;
+    const linePositions = new Float32Array(maxLineSegments * 2 * 3);
+    const lineGeometry = new THREE.BufferGeometry();
+    lineGeometry.setAttribute(
+      "position",
+      new THREE.BufferAttribute(linePositions, 3),
+    );
+    const lineMaterial = new THREE.LineBasicMaterial({
+      color: 0x38bdf8,
+      transparent: true,
+      opacity: 0.08,
+      blending: THREE.AdditiveBlending,
+    });
+    const lines = new THREE.LineSegments(lineGeometry, lineMaterial);
+    scene.add(lines);
+
+    const CONNECT_DISTANCE = 0.9;
+
+    const updateLines = () => {
+      let segmentIndex = 0;
+      for (
+        let i = 0;
+        i < particleCount && segmentIndex < maxLineSegments;
+        i++
+      ) {
+        const ax = positions[i * 3];
+        const ay = positions[i * 3 + 1];
+        const az = positions[i * 3 + 2];
+
+        for (
+          let j = i + 1;
+          j < particleCount && segmentIndex < maxLineSegments;
+          j++
+        ) {
+          const bx = positions[j * 3];
+          const by = positions[j * 3 + 1];
+          const bz = positions[j * 3 + 2];
+          const dist = Math.hypot(ax - bx, ay - by, az - bz);
+
+          if (dist < CONNECT_DISTANCE) {
+            const base = segmentIndex * 6;
+            linePositions[base] = ax;
+            linePositions[base + 1] = ay;
+            linePositions[base + 2] = az;
+            linePositions[base + 3] = bx;
+            linePositions[base + 4] = by;
+            linePositions[base + 5] = bz;
+            segmentIndex++;
+          }
+        }
+      }
+      lineGeometry.setDrawRange(0, segmentIndex * 2);
+      lineGeometry.attributes.position.needsUpdate = true;
+    };
+
     let animationId: number;
+    let running = true;
+
     const animate = () => {
-      particles.rotation.y += 0.0015;
-      particles.rotation.x += 0.0008;
+      if (!running) return;
+
+      for (let i = 0; i < particleCount; i++) {
+        for (let axis = 0; axis < 3; axis++) {
+          const idx = i * 3 + axis;
+          positions[idx] += velocities[idx];
+          if (positions[idx] > 3 || positions[idx] < -3) {
+            velocities[idx] *= -1;
+          }
+        }
+      }
+      geometry.attributes.position.needsUpdate = true;
+      updateLines();
+
+      particles.rotation.y += 0.0006;
+      lines.rotation.y = particles.rotation.y;
 
       renderer.render(scene, camera);
       animationId = requestAnimationFrame(animate);
     };
 
-    animate();
+    if (prefersReducedMotion) {
+      // Single static frame — nodes placed, no drift, no rAF loop.
+      updateLines();
+      renderer.render(scene, camera);
+    } else {
+      animate();
+    }
 
     const handleResize = () => {
       if (!container) return;
@@ -67,29 +170,40 @@ const GridParticleCanvas: React.FC = () => {
       camera.updateProjectionMatrix();
       renderer.setSize(container.clientWidth, container.clientHeight);
     };
-
     window.addEventListener("resize", handleResize);
 
     return () => {
+      running = false;
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationId);
       geometry.dispose();
+      lineGeometry.dispose();
       material.dispose();
+      lineMaterial.dispose();
       renderer.dispose();
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
     };
-  }, []);
+    // isOnScreen intentionally excluded from deps: the scene is created once
+    // and toggled via canvas visibility below, avoiding a full teardown/
+    // rebuild every time the user scrolls the section in and out of view.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prefersReducedMotion]);
 
   return (
-    <div ref={mountRef} className="absolute inset-0 pointer-events-none z-0" />
+    <div
+      ref={mountRef}
+      className="absolute inset-0 pointer-events-none z-0 transition-opacity duration-700"
+      style={{ opacity: isOnScreen ? 1 : 0 }}
+    />
   );
 };
 
 export const ArtifactGrid: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<FilterType>("ALL");
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const { ref: sectionRef, isOnScreen } = useOnScreen<HTMLElement>();
 
   const filteredProjects = useMemo(() => {
     return PROJECTS_DATA.filter((p) => {
@@ -103,91 +217,72 @@ export const ArtifactGrid: React.FC = () => {
   return (
     <section
       id="work"
+      ref={sectionRef}
       className="relative min-h-screen bg-[#08090a] py-24 sm:py-32 px-6 sm:px-12 lg:px-16 text-[#e2e8f0] select-none border-t border-white/5 overflow-hidden"
     >
-      {/* Micro Three.js Canvas Background for the Entire Grid */}
-      <GridParticleCanvas />
-
-      {/* Background 3D Grid Geometry Accent */}
+      <GridParticleCanvas isOnScreen={isOnScreen} />
       <div className="absolute inset-0 pointer-events-none opacity-[0.03] bg-[radial-gradient(#fff_1px,transparent_1px)] [background-size:32px_32px]" />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        {/* Section Identity Header */}
         <div className="mb-12 sm:mb-16">
-          <div className="flex items-center gap-3 mb-2">
-            <span className="font-mono text-xs tracking-[0.4em] uppercase text-neutral-500">
-              01 // DIGITAL ARTIFACTS
-            </span>
-            <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
-          </div>
-          <h2 className="text-2xl sm:text-4xl  font-mono uppercase text-white tracking-tight mb-4">
-            Selected Projects
+          <span className="font-mono text-xs tracking-[0.3em] text-neutral-500">
+            Selected work
+          </span>
+          <h2 className="text-2xl sm:text-4xl font-mono text-white tracking-tight mt-2 mb-4">
+            Projects &amp; systems I've built
           </h2>
           <p className="font-sans text-xs sm:text-sm text-neutral-400 max-w-2xl font-light leading-relaxed">
-            Systems, applications, experiments, and digital products I've
-            designed, developed, tested, and contributed to.
+            A mix of personal experiments and office builds — spanning
+            full-stack apps, dashboards, and workflow tools I designed,
+            developed, and tested end to end.
           </p>
         </div>
 
-        {/* Minimal Futuristic Filter Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-12 pb-4 border-b border-white/10 font-mono text-[10px] tracking-[0.25em]">
-          <div className="flex items-center gap-2 sm:gap-4">
-            {(["ALL", "PERSONAL", "OFFICE", "CURRENT"] as FilterType[]).map(
-              (filter) => {
-                const isActive = activeFilter === filter;
-                return (
-                  <button
-                    key={filter}
-                    onClick={() => setActiveFilter(filter)}
-                    className={`px-3 py-1.5 transition-all duration-300 rounded border ${
-                      isActive
-                        ? "bg-white text-black border-white font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)]"
-                        : "bg-transparent text-neutral-400 border-white/10 hover:border-white/30 hover:text-white"
-                    }`}
-                  >
-                    {filter}
-                  </button>
-                );
-              },
-            )}
-          </div>
-
-          <div className="hidden sm:block text-neutral-500 text-[9px]">
-            INDEX: [ 001 — 006 ]
-          </div>
-        </div>
-
-        {/* Interactive Telemetry Index List */}
-        <div className="mb-12 overflow-x-auto pb-2 scrollbar-none border-b border-white/5">
-          <div className="flex items-center gap-6 font-mono text-[10px] whitespace-nowrap text-neutral-500">
-            <span className="text-neutral-600">// TELEMETRY JUMP INDEX:</span>
-            {PROJECTS_DATA.map((p) => (
+        {/* Filter bar */}
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-12 pb-4 border-b border-white/10 font-mono text-[11px] tracking-[0.1em]">
+          {FILTERS.map((filter) => {
+            const isActive = activeFilter === filter.id;
+            return (
               <button
-                key={p.id}
-                onClick={() => setSelectedProject(p)}
-                className="hover:text-emerald-400 transition-colors flex items-center gap-1.5"
+                key={filter.id}
+                onClick={() => setActiveFilter(filter.id)}
+                aria-pressed={isActive}
+                className={`px-3 py-1.5 transition-all duration-300 rounded border ${
+                  isActive
+                    ? "bg-white text-black border-white font-semibold shadow-[0_0_15px_rgba(255,255,255,0.2)]"
+                    : "bg-transparent text-neutral-400 border-white/10 hover:border-white/30 hover:text-white"
+                }`}
               >
-                <span className="text-neutral-400">{p.id}</span>
-                <span>/</span>
-                <span>{p.title.split(" ")[0].toUpperCase()}</span>
+                {filter.label}
               </button>
-            ))}
-          </div>
+            );
+          })}
+          <span className="ml-auto text-neutral-600 text-[10px] hidden sm:inline">
+            {filteredProjects.length} of {PROJECTS_DATA.length}
+          </span>
         </div>
 
-        {/* 3D Spatial Interactive Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10">
-          {filteredProjects.map((project) => (
+        {/* Bento-style responsive grid: the in-progress project gets the
+            wide featured treatment, everything else sits two-up. */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-10">
+          {filteredProjects.map((project, index) => (
             <SpatialCard3D
               key={project.id}
               project={project}
               onSelect={(p) => setSelectedProject(p)}
+              featured={project.status === "Currently Working"}
+              revealDelay={Math.min(index, 5) * 90}
             />
           ))}
         </div>
+
+        {filteredProjects.length === 0 && (
+          <div className="py-20 text-center font-mono text-sm text-neutral-500">
+            Nothing filed under this filter yet.
+          </div>
+        )}
       </div>
 
-      {/* Detail Modal presentation */}
       <ProjectDetailModal
         project={selectedProject}
         onClose={() => setSelectedProject(null)}

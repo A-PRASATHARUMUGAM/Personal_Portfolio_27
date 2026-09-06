@@ -7,9 +7,12 @@ export interface Project {
   platform?: string;
   description: string;
   imageUrl?: string;
+  image?: string;
   technology: string[];
   githubUrl?: string;
   liveUrl?: string;
+  // When true, no real screenshot is shown anywhere (grid or modal) — an
+  // abstract generated cover is used instead to respect client confidentiality.
   hasScreenshots?: boolean;
   problemStatement?: string;
   solutionStatement?: string;
@@ -26,7 +29,7 @@ export const PROJECTS_DATA: Project[] = [
     status: 'Completed',
     platform: 'Web',
     description: 'A responsive marketing campaign landing page focused on visual presentation, user engagement, responsive design, and conversion-oriented content.',
-    imageUrl: "/projects/LandingPage/L2.png",
+    imageUrl: '/projects/landing-page/cover.jpg',
     technology: ['HTML5', 'CSS3', 'JavaScript', 'React', 'Tailwind CSS'],
     githubUrl: 'https://github.com/A-PRASATHARUMUGAM',
     problemStatement: 'Marketing campaigns frequently struggle with high drop-off rates due to non-responsive layouts, poor loading speeds, and unoptimized visual hierarchies.',
@@ -73,6 +76,7 @@ export const PROJECTS_DATA: Project[] = [
     status: 'Completed',
     platform: 'Web',
     description: 'A web-based first-aid information platform designed to provide accessible emergency and first-aid guidance through a simple and responsive interface.',
+    imageUrl: '/projects/first-aid/cover.jpg',
     technology: ['HTML5', 'CSS3', 'JavaScript', 'React'],
     githubUrl: 'https://github.com/A-PRASATHARUMUGAM',
     problemStatement: 'Critical first-aid protocols are often difficult to navigate rapidly during real-time emergency situations due to bloated web pages.',
@@ -119,6 +123,7 @@ export const PROJECTS_DATA: Project[] = [
     status: 'Completed',
     platform: 'Web',
     description: 'A crowdfunding platform concept focused on presenting campaigns, managing project information, and creating a structured user experience for fundraising.',
+    imageUrl: '/projects/crowdfunding/cover.jpg',
     technology: ['React', 'Node.js', 'Express.js', 'MySQL'],
     githubUrl: 'https://github.com/A-PRASATHARUMUGAM',
     problemStatement: 'Conceptual campaign creators lack simple, cohesive platforms to publish structured project metadata and track fundraising milestones cleanly.',
