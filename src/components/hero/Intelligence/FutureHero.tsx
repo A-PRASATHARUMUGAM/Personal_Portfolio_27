@@ -238,8 +238,9 @@ export const FutureHero: React.FC = () => {
 
             {/* View Resume Button */}
             <a
-              href="/Resume/PRASATH_A_CV1.pdf"
+              href="/Resumes/PRASATH_A_CV.pdf"
               target="_blank"
+              // download="PRASATH_A_CV.pdf"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-xl border border-cyan-500/40 bg-cyan-500/10 px-5 sm:px-6 py-3 font-mono text-xs font-bold uppercase tracking-[0.2em] text-cyan-300 backdrop-blur-md transition-all duration-300 hover:bg-cyan-500/20 hover:border-cyan-400 hover:text-cyan-200 hover:shadow-[0_0_20px_rgba(34,211,238,0.25)] active:scale-95 cursor-pointer"
             >
