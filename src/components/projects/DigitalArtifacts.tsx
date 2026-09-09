@@ -117,12 +117,13 @@ const CREATIVE_ITEMS = [
     count: "Hummingbird & More",
     category: "Fine Art",
   },
-  {
-    id: 6,
-    title: "Murugan's Tree Book",
-    count: "Desktop Publishing",
-    category: "DTP / Editorial",
-  },
+  // ,
+  // {
+  //   id: 6,
+  //   title: "Murugan's Tree Book",
+  //   count: "Desktop Publishing",
+  //   category: "DTP / Editorial",
+  // },
 ];
 
 const MARKETING_CARDS = [
@@ -445,7 +446,8 @@ function ProjectCard({
   const handleMouseLeave = () => {
     if (rafId.current) cancelAnimationFrame(rafId.current);
     if (!cardRef.current || prefersReducedMotion) return;
-    cardRef.current.style.transform = "perspective(1000px) rotateX(0deg) rotateY(0deg)";
+    cardRef.current.style.transform =
+      "perspective(1000px) rotateX(0deg) rotateY(0deg)";
   };
 
   return (
